@@ -5,8 +5,10 @@ module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-jade');
+  grunt.loadNpmTasks('grunt-contrib-clean');
 
   grunt.initConfig({
+    clean:['public'],
     copy: {
       main: {
         files: [
@@ -22,5 +24,5 @@ module.exports = function (grunt) {
   }); 
 
   grunt.registerTask('default', []);
-  grunt.registerTask('build', ['copy', 'jade']);
+  grunt.registerTask('build', ['clean', 'copy', 'jade']);
 };
