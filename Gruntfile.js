@@ -8,8 +8,18 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jade');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-autoprefixer');
 
   grunt.initConfig({
+    autoprefixer: {
+      options: {
+        browsers: ['> 1% in US'],
+      },
+
+      build: {
+        src: 'public/css/**/*.css'
+      }
+    },
     clean:['public'],
     copy: {
       main: {
@@ -34,17 +44,23 @@ module.exports = function (grunt) {
       }
     },
     watch: {
-      scripts: {
-        files: ['app/**', '!**/_*.jade'],
-        tasks: ['build'],
-        options: {
-          spawn: false,
+      other: {
+        files: ['app/**', '!**/*.jade', '!app/**/*.{sass,scss}'],
+        tasks: ['copy'],
     },
-  },
-},
+    jade: {
+      files: ['app/**/*.jade'],
+      tasks: ['jade']
+    },
+    sass: {
+      files: ['app/**/*.{sass,scss}'],
+      tasks: ['sass', 'autoprefixer']
+    }
+    }
+
   }); 
 
   grunt.registerTask('default', []);
-  grunt.registerTask('build', ['clean', 'copy', 'jade', 'sass']);
-  grunt.registerTask('watch', ['build']);
+  grunt.registerTask('build', ['clean', 'copy', 'jade', 'sass', 'autoprefixer']);
+  grunt.registerTask('serve', ['build', 'watch']);
 };
