@@ -9,6 +9,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-autoprefixer');
+  grunt.loadNpmTasks('grunt-wiredep');
 
   grunt.initConfig({
     autoprefixer: {
@@ -30,6 +31,9 @@ module.exports = function (grunt) {
     },
     jade: {
       compile: {
+        options: {
+          pretty: true
+        },
         files: [{expand: true, cwd: 'app/', src: ['**/*.jade', '!**/_*.jade'], dest: 'public/', ext: '.html'}]
       }
     },
@@ -44,6 +48,10 @@ module.exports = function (grunt) {
       }
     },
     watch: {
+      bower: {
+        files: ['bower.json'],
+        tasks: ['wiredep']
+      },
       other: {
         files: ['app/**', '!**/*.jade', '!app/**/*.{sass,scss}'],
         tasks: ['copy'],
@@ -55,12 +63,18 @@ module.exports = function (grunt) {
     sass: {
       files: ['app/**/*.{sass,scss}'],
       tasks: ['sass', 'autoprefixer']
-    }
+     }
+    },
+
+    wiredep: {
+      build: {
+        src: ['public/**/*.html']
+      }
     }
 
   }); 
 
   grunt.registerTask('default', []);
-  grunt.registerTask('build', ['clean', 'copy', 'jade', 'sass', 'autoprefixer']);
+  grunt.registerTask('build', ['clean', 'copy', 'jade', 'sass', 'autoprefixer', 'wiredep']);
   grunt.registerTask('serve', ['build', 'watch']);
 };
