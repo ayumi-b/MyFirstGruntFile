@@ -7,6 +7,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-jade');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.initConfig({
     clean:['public'],
@@ -31,9 +32,19 @@ module.exports = function (grunt) {
           'public/css/main.css': 'app/styles/main.scss'  //key : value//
         }
       }
-    }
+    },
+    watch: {
+      scripts: {
+        files: ['app/**', '!**/_*.jade'],
+        tasks: ['build'],
+        options: {
+          spawn: false,
+    },
+  },
+},
   }); 
 
   grunt.registerTask('default', []);
   grunt.registerTask('build', ['clean', 'copy', 'jade', 'sass']);
+  grunt.registerTask('watch', ['build']);
 };
